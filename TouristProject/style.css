@@ -1,0 +1,59 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    flex-direction: column;
+}
+.formBox{
+    width: 100%;
+    border: 1px solid red;
+    padding: 20px;
+    font-family: 'Courier New', Courier, monospace;
+}
+.formBox h1{
+    text-align: center;
+    font-size: 35px;
+    padding: 30px 0;
+}
+.formBox form{
+    font-size: 20px;
+    font-weight: 600;
+}
+.formBox form select{
+    font-size: 16px;
+    font-weight: 400;
+}
+.formBox button{
+   margin-top: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100px;
+    height: 30px;
+    background-color: salmon;
+    color: white;
+    border: 1px solid salmon;
+}
+.formBox button:hover{
+    background-color:white;
+    color: salmon;
+    border: 2px solid black;
+    cursor: pointer;
+}
+.formBox .radioBox input{
+margin-left: 20px;
+
+}
+
+.formBox .responceBox input{
+    margin-left: 20px;
+}
+.formBox p{
+    padding: 10px 0;
+}

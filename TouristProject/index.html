@@ -24,29 +24,30 @@
                 </select>
                 <p>Виберіть діапазон пошуку:</p>
                 <!-- <label for="range">Виберіть діапазон пошуку: </label> -->
-                <div class="radioBox"><input type="radio" id="rangeChoice1" name="range" value="m500">
+                <div class="radioBox">
+                    <input type="radio" name="range" value="500" checked>
                     <label for="rangeChoice1">0.5км</label>
 
-                    <input type="radio" id="rangeChoice2" name="range" value="km1">
+                    <input type="radio" name="range" value="1000">
                     <label for="rangeChoice2">1км</label>
 
-                    <input type="radio" id="rangeChoice3" name="range" value="km2">
+                    <input type="radio" name="range" value="2000">
                     <label for="rangeChoice3">2км</label>
-                    <input type="radio" id="rangeChoice4" name="range" value="km5">
+                    <input type="radio" name="range" value="5000">
                     <label for="rangeChoice4">5км</label>
 
-                    <input type="radio" id="rangeChoice5" name="range" value="km10">
+                    <input type="radio" name="range" value="10000">
                     <label for="rangeChoice5">10км</label>
 
-                    <input type="radio" id="rangeChoice6" name="range" value="km20">
+                    <input type="radio" name="range" value="20000">
                     <label for="rangeChoice6">20км</label>
 
-                    <input type="radio" id="rangeChoice7" name="range" value="km50">
+                    <input type="radio" name="range" value="50000">
                     <label for="rangeChoice7">50км</label>
                 </div>
-                <div class="responceBox">
+                <div class="responseBox">
                     <p>Type response: </p>
-                    <input type="radio" id="respChoice1" name="resp" value="map">
+                    <input type="radio" id="respChoice1" name="resp" value="map" checked>
                     <label for="rangeChoice6">Map</label>
 
                     <input type="radio" id="respChoice2" name="resp" value="csv">
@@ -57,13 +58,18 @@
                 </div>
             </form>
         </div>
-        <button type="button" id="findMe">FindME</button>
         <div id="map" style="width:100%;height:400px; margin-top: 50px;">My map will go here</div>
+
+
+
+
     </div>
 
     <script src="script.js"></script>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL_wefSglwBxpRWL8XIC9qYD2M1uyWr4c&callback=myMap"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL_wefSglwBxpRWL8XIC9qYD2M1uyWr4c&callback=myMap"></script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL_wefSglwBxpRWL8XIC9qYD2M1uyWr4c"></script>
 </body>
 
 </html>

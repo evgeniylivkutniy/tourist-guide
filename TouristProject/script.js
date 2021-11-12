@@ -1,74 +1,58 @@
 
-function myMap() {
+//Реалізовуєм фунцію передачі поточних координат геолокації і передаєм їх в ф-цію для створення карти.
+const getLocation = () => new Promise((resolve, reject) => {
+
     function success(pos) {
-        var crd = pos.coords;
-        crd.latitude = parseFloat(lat);
-        crd.longitude = parseFloat(lng);
+        resolve(pos.coords);
     };
-
     function error(err) {
-        console.warn(`ERROR(${err.code}): ${err.message}`);
+        reject(err);
     };
-
     navigator.geolocation.getCurrentPosition(success, error);
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: this.lat, lng: this.lng },
+});
+
+
+async function myMap(data) {
+    let requestData = data
+    const coords = await getLocation()
+    let map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: coords.latitude, lng: coords.longitude },
         zoom: 12
     });
+    console.log(requestData.radius)
+    function createMarker(place) {
+        new google.maps.Marker({
+            position: place.geometry.location,
+            map: map,
+        });
+    }
+    var request = {
+        location: { lat: coords.latitude, lng: coords.longitude },
+        radius: 500,
+        query: requestData.establishments
+    };
+
+    service = new google.maps.places.PlacesService(map);
+    service.textSearch(request, callback);
+
+    function callback(results, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+                var place = results[i];
+                createMarker(results[i]);
+            }
+        }
+    }
+
 }
-
-let subBtn = document.querySelector('#submitBtn');
-subBtn.addEventListener('click', myMap)
-
-
-// let query = ['restaurant', 'museum', 'hotel', 'coffee', 'McDonalds'];
-// let radius = Number
-// let lat = Number
-// let lng = Number;
-
-// const requestURL = 'http://198.199.125.240:8888/search';
-
-// function sendRequest(method, url, body = null) {
-//     return new Promise((resolve, reject) => {
-//         const xhr = new XMLHttpRequest()
-
-//         xhr.open(method, url)
-//         xhr.responseType = 'json'
-//         xhr.setRequestHeader('Content-Type', 'application/json')
-
-//         xhr.onload = () => {
-//             if (xhr.status >= 400) {
-//                 reject(xhr.response)
-//             } else {
-//                 resolve(xhr.response)
-//             }
-//         }
-//         xhr.onerror = () => {
-//             reject(xhr.response)
-//         }
-//         xhr.send(JSON.stringify(body))
-//     })
-// }
-
-
-// let body = {
-//     "query": "restaurant",
-//     "radius": 10000,
-//     "lat": 50.27,
-//     "lng": 30.31
-// }
-
-
-// sendRequest('POST', requestURL, body)
-//     .then(data => console.log(data))
-//     .catch(err => console.log(err));
-
 
 let myForm = document.querySelector('#myForm');
 
-myForm.addEventListener('submit', function (e) {
+myForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-
+    let urlSearch = 'http://198.199.125.240:8888/search';
+    let urlCsv = 'http://198.199.125.240:8888/csv'
+    let coords = await getLocation()
     let elem = e.target;
     let sel = document.querySelector('#establishments');
     let formData = {
@@ -78,11 +62,33 @@ myForm.addEventListener('submit', function (e) {
     }
     console.log(formData.establishments, formData.radius, formData.respType);
 
-    axios.post('http://198.199.125.240:8888/csv', {
-        "query": formData.establishments,
-        "radius": formData.radius,
-        "lat": 50.27,
-        "lng": 30.31
+    axios({
+        url: (formData.respType === 'map') ? urlSearch : urlCsv,
+        method: 'POST',
+        responseType: (formData.respType === 'map') ? 'json' : 'blob',
+        data: {
+            "query": formData.establishments,
+            "radius": formData.radius,
+            "lat": coords.latitude,
+            "lng": coords.longitude
+        }
+
+    }).then(async function (response) {
+        if (formData.respType === 'map') {
+            console.log('respForMap', response.data)
+            await myMap(formData)
+        }
+        else {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'file.csv'); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+        }
+
     })
+
 })
+
 
